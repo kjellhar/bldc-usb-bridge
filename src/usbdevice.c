@@ -2,7 +2,10 @@
  * usbcfg.c
  *
  *  Created on: Jul 10, 2013
- *      Author: kjell
+ *      Author: Kjell Harald Andersen
+ *
+ *  Module for connecting a STM32 controller to USB using Chibios.
+ *  This module abstracts the USB part even further.
  */
 
 #include "ch.h"

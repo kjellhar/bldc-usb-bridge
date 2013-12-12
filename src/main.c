@@ -4,9 +4,19 @@
 #include "hal.h"
 #include "usbdevice.h"
 #include "bridge_cmd.h"
+#include "status_blink.h"
+
+#define USB_TIMEOUT		100
+#define POLLING_TIMEOUT	5000
 
 static Mailbox* usbTXMailbox;
 static Mailbox* usbRXMailbox;
+
+static VirtualTimer polling_vt;
+
+void disconnect() {
+	connected = FALSE;
+}
 
 
 int main(void) {
@@ -18,6 +28,10 @@ int main(void) {
   startUsbControl();
   usbGetMailboxes (&usbRXMailbox, &usbTXMailbox);
 
+  startStatusBlink();
+
+  connected = TRUE;
+
   msg_t msg;
   usbPacket* usbBufp;
   uint8_t cmd;
@@ -25,20 +39,29 @@ int main(void) {
 
 
   while (TRUE) {
-    retVal = chMBFetch (usbRXMailbox, &msg, TIME_INFINITE);
+    retVal = chMBFetch (usbRXMailbox, &msg, USB_TIMEOUT);
 
-    usbBufp=(usbPacket*)msg;
-    cmd = usbBufp->packet[0];
+    if (retVal == RDY_OK) {
 
-    switch (cmd) {
-    case BR_STATUS:
-    	break;
+		usbBufp=(usbPacket*)msg;
+		cmd = usbBufp->packet[0];
 
-    case BR_USART_TX:
-    	break;
+		switch (cmd) {
+		case BR_STATUS:
+			connected = TRUE;
+			chSysLockFromIsr();
+			if (chVTIsArmedI(&polling_vt)) chVTResetI(&polling_vt);
 
-    default:
-    	break;
+			chVTSetI(&polling_vt, MS2ST(POLLING_TIMEOUT), disconnect, NULL);
+			chSysUnlockFromIsr();
+			break;
+
+		case BR_USART_TX:
+			break;
+
+		default:
+			break;
+		}
     }
   }
 }

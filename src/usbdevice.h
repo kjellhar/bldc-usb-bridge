@@ -2,7 +2,7 @@
  * usbcfg.h
  *
  *  Created on: Jul 10, 2013
- *      Author: kjell
+ *      Author: Kjell Harald Andersen
  */
 
 #ifndef USBCFG_H_

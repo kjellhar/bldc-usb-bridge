@@ -9,8 +9,6 @@
 #define BRIDGE_CMD_H_
 
 #define BR_STATUS			0x00
-#define BR_CONNECT			0x01
-#define BR_DISCONNECT		0x02
 
 #define BR_USART_CONNECT	0x00
 #define BR_USART_TX			0x11

@@ -1,3 +1,10 @@
+/*
+ * usbdescriptort.h
+ *
+ *  Created on: Dec 12, 2013
+ *      Author: Kjell Harald Andersen
+ */
+
 #ifndef USBDESCRIPTOR_H_INCLUDED
 #define USBDESCRIPTOR_H_INCLUDED
 

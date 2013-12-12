@@ -85,6 +85,7 @@ CSRC = $(PORTSRC) \
        $(BOARDSRC) \
        $(CHIBIOS)/os/various/chprintf.c \
        src/usbdevice.c \
+       src/status_blink.c \
        src/main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
